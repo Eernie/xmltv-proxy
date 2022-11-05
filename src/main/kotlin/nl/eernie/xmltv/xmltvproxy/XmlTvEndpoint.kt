@@ -16,7 +16,7 @@ import javax.xml.bind.JAXBContext
 
 
 @RestController
-class XmlTvEndpoint(val xmlTvClient: XmlTvClient, @Value("TZ") val timezone: String) {
+class XmlTvEndpoint(val xmlTvClient: XmlTvClient, @Value("\${TZ}") val timezone: String) {
 
     @RequestMapping(value = ["/xmltv"], produces = [MediaType.APPLICATION_XML_VALUE])
     fun getXmlTv(): ResponseEntity<String> {
