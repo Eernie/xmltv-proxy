@@ -1,6 +1,7 @@
 package nl.eernie.xmltv.xmltvproxy
 
 import nl.eernie.xmltv.xsd.Tv
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -15,7 +16,7 @@ import javax.xml.bind.JAXBContext
 
 
 @RestController
-class XmlTvEndpoint(var xmlTvClient: XmlTvClient) {
+class XmlTvEndpoint(val xmlTvClient: XmlTvClient, @Value("TZ") val timezone: String) {
 
     @RequestMapping(value = ["/xmltv"], produces = [MediaType.APPLICATION_XML_VALUE])
     fun getXmlTv(): ResponseEntity<String> {
@@ -39,6 +40,6 @@ class XmlTvEndpoint(var xmlTvClient: XmlTvClient) {
     fun adjustTimezone(date: String): String {
         val pattern = DateTimeFormatter.ofPattern("yyyyMMddHHmmss Z")
         val zdt = ZonedDateTime.parse(date, pattern)
-        return zdt.withZoneSameLocal(ZoneId.of("Europe/Amsterdam")).format(pattern)
+        return zdt.withZoneSameLocal(ZoneId.of(timezone)).format(pattern)
     }
 }
